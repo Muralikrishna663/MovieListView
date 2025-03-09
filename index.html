@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .movie-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .movie-card {
+            width: 200px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .movie-card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Movie List</h2>
+    <div class="movie-container" id="movieContainer"></div>
+
+    <script>
+        const API_KEY = '0e06e91574057be6ff55c64b13b54008';
+        // Replace with your TMDb API key
+        const COLLECTION_ID = '10'; // Example Collection ID
+        const API_URL = `https://api.themoviedb.org/3/collection/${COLLECTION_ID}?api_key=${API_KEY}`;
+
+        async function fetchMovies() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                displayMovies(data.parts);
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        }
+
+        function displayMovies(movies) {
+            const movieContainer = document.getElementById('movieContainer');
+            movieContainer.innerHTML = '';
+            
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                
+                movieCard.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>Release Date: ${movie.release_date}</p>
+                `;
+                
+                movieContainer.appendChild(movieCard);
+            });
+        }
+        
+        fetchMovies();
+    </script>
+</body>
+</html>
